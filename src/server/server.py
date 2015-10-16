@@ -32,6 +32,7 @@ def write_response(response, request):
     write http response
     '''
     try:
+        request.setHeader("Access-Control-Allow-Origin", "*")
         request.write(str(response))
         request.finish()
     except Exception, err:
