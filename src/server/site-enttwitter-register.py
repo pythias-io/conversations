@@ -5,7 +5,7 @@ from conversations.src.server.server import RequestFactory
 from twisted.python.log import ILogObserver, FileLogObserver
 from twisted.python.logfile import DailyLogFile
 from twisted.internet import reactor
-port = 9009
+port = 9010
 threads = 20
 log = 'log-twistd-conversation-server.log'
 
