@@ -32,8 +32,11 @@ def write_response(response, request):
     write http response
     '''
     try:
-        request.setHeader("Access-Control-Allow-Origin", "*")
-        request.write(str(response))
+        request.setHeader('X-ConversationId',
+                response.get('conversation_id'))
+        request.setHeader('X-ClientId',
+                response.get('client_id'))
+        request.write(str(response['message']))
         request.finish()
     except Exception, err:
         log('write_response() fail - %r' % err, 'error')
