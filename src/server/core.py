@@ -24,7 +24,10 @@ def initiate_conversation(params):
         memcache = MemcacheHandler()
         memcache.set(str(user_id), str(conversation_id), 60)
 
-        response = text_response['response']
+        response = dict(
+                conversation_id=conversation_id,
+                client_id=text_response['client_id'],
+                message=text_response['response'])
         return response
 
     except AssertionError:
@@ -55,7 +58,10 @@ def continue_conversation(params):
         text_response = eval(conv_response.text)
         print text_response
 
-        response = text_response['response']
+        response = dict(
+                conversation_id=conversation_id,
+                client_id=text_response['client_id'],
+                message=text_response['response'])
         return response
 
     except Exception, err:
