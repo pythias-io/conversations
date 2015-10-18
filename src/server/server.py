@@ -93,9 +93,11 @@ def process_conversation(params, request):
 
         write_response(response, request)
 
-    except MissingParameterException:
+    #except MissingParameterException:
+    except AssertionError:
         write_error(request, 'missing_parameter')
         return
+
     except Exception, err:
         log('process_conversation() fail - %r' % err, 'error')
         write_error(request, 'error')

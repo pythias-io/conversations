@@ -5,6 +5,7 @@ from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
 
 DIALOG_ID = '005c3873-680f-437b-94a9-83ee7fe54569'
+CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):
     '''
@@ -22,7 +23,8 @@ def initiate_conversation(params):
         assert str(client_id) == str(user_id)
 
         memcache = MemcacheHandler()
-        memcache.set(str(user_id), str(conversation_id), 60)
+        cache_key = '%s.%s' % (CACHE_ID, str(user_id))
+        memcache.set(cache_key, str(conversation_id), 60)
 
         response = dict(
                 conversation_id=conversation_id,
@@ -49,7 +51,8 @@ def continue_conversation(params):
         user_input = params['input']
 
         memcache = MemcacheHandler()
-        conversation_id = memcache.get(str(user_id))
+        cache_key = '%s.%s' % (CACHE_ID, str(user_id))
+        conversation_id = memcache.get(cache_key)
 
         payload = dict(dialog_id=DIALOG_ID)
         client = WDSClient(payload)
