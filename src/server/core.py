@@ -3,9 +3,11 @@
 import time
 from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
+from enttwitter.src.exchange.pub import Publisher
 
-DIALOG_ID = '005c3873-680f-437b-94a9-83ee7fe54569'
+DIALOG_ID = 'b55fae6c-aeef-49af-9b54-98430b3b0e42'
 CACHE_ID = 'conversations.id'
+REQUESTS_QUEUE = 'enttwtr.twitter.requests'
 
 def initiate_conversation(params):
     '''
@@ -71,3 +73,32 @@ def continue_conversation(params):
         error = 'continue_conversation() - %s' % str(err)
         print error
         raise err
+
+
+def queue_request(resp):
+    '''
+    Queues dynamic requests for REQUESTS service
+
+    {'conversation_id': '69375',
+    'message': ['balance', '', 'Feel free to ask another question... You can request for your account balance or a mini statement. We can even help you locate an ATM near you'],
+    'client_id': ***REMOVED***}
+    '''
+    try:
+        payload = {'service_id': resp['action'],
+                'username': resp['channel'],
+                'user': resp['username'],
+                'user_id': resp['client_id'],
+                'password': '',
+                'request_id': resp['conversation_id'],
+                'args': {'channel': resp['channel']}}
+        Publisher(payload, REQUESTS_QUEUE)
+
+    except Exception, err:
+        error = 'continue_conversation() - %s' % str(err)
+        print error
+        raise err
+
+
+
+
+

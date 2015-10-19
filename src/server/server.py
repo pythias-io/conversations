@@ -9,7 +9,8 @@ from commonutils.common.core import (verify_params,
 from enttwitter.src.configs.register import HTTP
 
 from conversations.src.server.core import (initiate_conversation,
-        continue_conversation)
+        continue_conversation, queue_request)
+from conversations.src.channels.config import SERVICES, ACK
 
 
 def get_params(request):
@@ -36,7 +37,9 @@ def write_response(response, request):
                 response.get('conversation_id'))
         request.setHeader('X-ClientId',
                 response.get('client_id'))
-        request.write(str(response['message']))
+        request.setHeader('X-RequestType',
+                response.get('type'))
+        request.write(str(response['user_message']))
         request.finish()
     except Exception, err:
         log('write_response() fail - %r' % err, 'error')
@@ -84,14 +87,32 @@ def process_conversation(params, request):
     try:
         #verify_params(params, ['user_id'])
         assert 'user_id' in params
+
         if 'input' in params:
             print 'existing session'
-            response = continue_conversation(params)
+            resp = continue_conversation(params)
         else:
             print 'new session'
-            response = initiate_conversation(params)
+            resp = initiate_conversation(params)
 
-        write_response(response, request)
+
+        print "--- %s ---" % resp
+        req_type = SERVICES[resp['message'][0]]['type']
+        resp['type'] = req_type
+        if req_type == 'static':
+            response = SERVICES[resp['message'][0]]['text']
+        elif req_type == 'dynamic':
+            # queue request
+            resp['action'] = SERVICES[resp['message'][0]]['action']
+            resp['channel'] = params['channel']
+            resp['username'] = params['username']
+            queue_request(resp)
+            print 'request queued'
+            response = ACK % params['user_id']
+
+        resp['user_message'] = response
+
+        write_response(resp, request)
 
     #except MissingParameterException:
     except AssertionError:
