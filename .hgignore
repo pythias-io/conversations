@@ -6,3 +6,4 @@ syntax: glob
 *.log
 *.orig
 logs/*
+docs/build/*
