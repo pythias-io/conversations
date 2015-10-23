@@ -88,13 +88,13 @@ def process_conversation(params, request):
         #verify_params(params, ['user_id'])
         assert 'user_id' in params
 
-        if 'input' in params:
-            print 'existing session'
-            resp = continue_conversation(params)
-        else:
-            print 'new session'
-            resp = initiate_conversation(params)
+        print 'new session'
+        resp = initiate_conversation(params)
 
+        if 'input' in params:
+            if params['input'].isalpha():
+                print 'existing session'
+                resp = continue_conversation(params)
 
         print "--- %s ---" % resp
         req_type = SERVICES[resp['message'][0]]['type']
