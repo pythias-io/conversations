@@ -37,7 +37,7 @@ def initiate_conversation(params):
     except AssertionError:
         error = 'initiate_conversation() - AssertionErr: %s' % str(err)
         print error
-        raise err
+        raise AssertionError(error)
 
     except Exception, err:
         error = 'initiate_conversation() - %s' % str(err)
