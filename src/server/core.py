@@ -1,13 +1,16 @@
 """
 """
+import json
 import time
+from commonutils.common.core import log
 from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
-from enttwitter.src.exchange.pub import Publisher
+from service_engine.src.config import SQS_CONFIG
+
+import boto3
 
 DIALOG_ID = 'b55fae6c-aeef-49af-9b54-98430b3b0e42'
 CACHE_ID = 'conversations.id'
-REQUESTS_QUEUE = 'enttwtr.twitter.requests'
 
 def initiate_conversation(params):
     '''
@@ -77,7 +80,7 @@ def continue_conversation(params):
 
 def queue_request(resp):
     '''
-    Queues dynamic requests for REQUESTS service
+    Publishes request payload to SQS for REQUESTS service to consume
 
     {'conversation_id': '69375',
     'message': ['balance', '', 'Feel free to ask another question... You can request for your account balance or a mini statement. We can even help you locate an ATM near you'],
@@ -91,14 +94,22 @@ def queue_request(resp):
                 'password': '',
                 'request_id': resp['conversation_id'],
                 'args': {'channel': resp['channel']}}
-        Publisher(payload, REQUESTS_QUEUE)
+
+        sqs_client = boto3.client(
+                'sqs',
+                aws_access_key_id=SQS_CONFIG.get('access_key'),
+                aws_secret_access_key=SQS_CONFIG.get('secret'),
+                region_name=SQS_CONFIG.get('region')
+                )
+        queue = SQS_CONFIG['requests_queue']
+        published = sqs_client.send_message(
+                QueueUrl=queue,
+                MessageBody=json.dumps(payload)
+                )
+        log('Published msg %s to queue %s' % (
+            published.get('MessageId'), queue), 'info')
 
     except Exception, err:
         error = 'continue_conversation() - %s' % str(err)
-        print error
+        log(error, 'error')
         raise err
-
-
-
-
-
