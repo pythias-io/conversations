@@ -38,3 +38,8 @@ SERVICES['balance']['action'] = 'balance'
 SERVICES['statement'] = {}
 SERVICES['statement']['type'] = 'dynamic'
 SERVICES['statement']['action'] = 'transactions'
+
+
+SERVICES['forex'] = {}
+SERVICES['forex']['type'] = 'dynamic'
+SERVICES['forex']['action'] = 'forex'

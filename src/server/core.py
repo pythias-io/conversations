@@ -5,7 +5,7 @@ import time
 from commonutils.common.core import log
 from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
-from service_engine.src.config import SQS_CONFIG
+from service_engine.src.configs.config import SQS_CONFIG
 
 import boto3
 
