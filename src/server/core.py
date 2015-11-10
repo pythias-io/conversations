@@ -9,7 +9,7 @@ from service_engine.src.configs.config import SQS_CONFIG
 
 import boto3
 
-DIALOG_ID = 'b55fae6c-aeef-49af-9b54-98430b3b0e42'
+DIALOG_ID = '***REMOVED***'
 CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):
@@ -22,7 +22,8 @@ def initiate_conversation(params):
         client = WDSClient(payload)
         ini_response = client.run_conversation(new=True)
         text_response = eval(ini_response.text)
-        print text_response
+        print "WDS Response for {user_id} - {request_id} : %s".format(
+                **params) % text_response
         conversation_id = text_response['conversation_id']
         client_id = text_response['client_id']
         assert str(client_id) == str(user_id)
@@ -106,8 +107,8 @@ def queue_request(resp):
                 QueueUrl=queue,
                 MessageBody=json.dumps(payload)
                 )
-        log('Published msg %s to queue %s' % (
-            published.get('MessageId'), queue), 'info')
+        log('Published msg %s to queue %s -- %s' % (
+            published.get('MessageId'), queue, resp), 'info')
 
     except Exception, err:
         error = 'continue_conversation() - %s' % str(err)
