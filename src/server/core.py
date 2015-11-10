@@ -39,7 +39,7 @@ def initiate_conversation(params):
         return response
 
     except AssertionError:
-        error = 'initiate_conversation() - AssertionErr: %s' % str(err)
+        error = 'ERROR: initiate_conversation() - client_id and user_id do not match'
         print error
         raise AssertionError(error)
 
