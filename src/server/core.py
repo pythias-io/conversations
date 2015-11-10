@@ -30,7 +30,7 @@ def initiate_conversation(params):
 
         memcache = MemcacheHandler()
         cache_key = '%s.%s' % (CACHE_ID, str(user_id))
-        memcache.set(cache_key, str(conversation_id), 60)
+        memcache.set(cache_key, str(conversation_id))
 
         response = dict(
                 conversation_id=conversation_id,
@@ -59,6 +59,7 @@ def continue_conversation(params):
         memcache = MemcacheHandler()
         cache_key = '%s.%s' % (CACHE_ID, str(user_id))
         conversation_id = memcache.get(cache_key)
+        print 'conversation ID from cache %s' % conversation_id
 
         payload = dict(dialog_id=DIALOG_ID)
         client = WDSClient(payload)
