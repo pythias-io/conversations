@@ -33,6 +33,7 @@ def write_response(response, request):
     write http response
     '''
     try:
+        request.setHeader('X-Status', 'success')
         request.setHeader('X-ConversationId',
                 response.get('conversation_id'))
         request.setHeader('X-ClientId',
@@ -51,6 +52,7 @@ def write_error(request, error):
     write error on http response
     '''
     try:
+        request.setHeader('X-Status', 'error')
         request.write(str(error))
         request.finish()
     except Exception, err:
@@ -72,7 +74,6 @@ def setup(func):
     def __inner(request):
         try:
             params = get_params(request)
-            print 'Params: %s' % params
             func(params, request)
         except Exception, err:
             error = 'setup() fail - %r' % err
@@ -87,16 +88,26 @@ def process_conversation(params, request):
     try:
         #verify_params(params, ['user_id'])
         assert 'user_id' in params
+        new = True
 
         if 'input' in params:
-            if params['input'].isalpha():
-                print 'existing session'
-                resp = continue_conversation(params)
-        else:
+            if len(str(params['input'])) > 1:
+                new = False
+
+        if new == True:
             print 'new session'
             resp = initiate_conversation(params)
+        else:
+            print 'existing session'
+            resp = continue_conversation(params)
 
-        req_type = SERVICES[resp['message'][0]]['type']
+        try:
+            req_type = SERVICES[resp['message'][0]]['type']
+            print 'Request type: %s -- %s' % (req_type, params)
+        except KeyError:
+            err = 'ERROR: Service not defined - %s' % params
+            raise Exception(err)
+
         resp['type'] = req_type
         if req_type == 'static':
             response = SERVICES[resp['message'][0]]['text']
@@ -106,7 +117,6 @@ def process_conversation(params, request):
             resp['channel'] = params['channel']
             resp['username'] = params['username']
             queue_request(resp)
-            print 'request queued'
             response = ACK % params['user_id']
 
         resp['user_message'] = response
@@ -121,7 +131,6 @@ def process_conversation(params, request):
     except Exception, err:
         log('process_conversation() fail - %r' % err, 'error')
         write_error(request, 'error')
-
 
 
 def get_pages():
