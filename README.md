@@ -6,6 +6,21 @@ Initiates and maintains conversation sessions between the user and [Watson Dialo
 
 All interaction with WDS is through the WDS API wrapper on [commonutils](https://bitbucket.org/pythias_io/commonutils/overview)
 
+## Execution Flow ##
+
+1. Receives HTTP request from channel application (Twitter, Telegram, FB, Whatsapp, etc..)
+2. Validate request parameters
+3. Initiate dialog (or continue dialog) - depending on request parameters received
+4. Receive response from IBM WDS; and match keyword against local config
+5. Distinguish static responses from dynamic responses; Publish dynamic responses to SQS queue for Requests engine
+6. Publish HTTP response to channel
+
+
+## :construction: TO DO ##
+
+1. Persist request data on DB
+2. Add API authentication mechanisms
+3. Add metrics for I/O points
 
 ### Services ###
 
@@ -91,6 +106,7 @@ $ python client.py 2 "what is my balance?"
 
 
 
-### How do I get set up? ###
+### :beetle: Bugs ###
 
-*
+1. 
+2. 
