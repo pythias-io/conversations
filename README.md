@@ -21,6 +21,7 @@ All interaction with WDS is through the WDS API wrapper on [commonutils](https:/
 1. Persist request data on DB
 2. Add API authentication mechanisms
 3. Add metrics for I/O points
+4. Add OTP logic
 
 ### Services ###
 
@@ -109,4 +110,4 @@ $ python client.py 2 "what is my balance?"
 ### :beetle: Bugs ###
 
 1. 
-2. 
+2.
