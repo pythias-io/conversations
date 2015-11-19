@@ -2,6 +2,8 @@
 """
 import json
 import time
+from db_utilities.mysql.core import run_query
+
 from commonutils.common.core import log
 from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
@@ -115,3 +117,35 @@ def queue_request(resp):
         error = 'continue_conversation() - %s' % str(err)
         log(error, 'error')
         raise err
+
+
+def is_verified(params):
+    '''
+
+    {'message': ((0,),), 'rows': 1, 'ok': True}
+
+    {'message': (), 'rows': 0, 'ok': True}
+
+    '''
+    try:
+        verified, not_verified = 1, 0
+        channel = params['channel']
+        if channel.lower() == 'twitter':
+            query = "select verified from twitter_users where twitter_id = {}".format(params['user_id'])
+            resp = run_query(query)
+            log('Verified: DB resp: {}'.format(str(resp)), 'debug')
+            if resp['ok'] and resp['message']:
+                verif = resp['message'][0][0]
+                return True if verif == verified else False
+            else:
+                return False
+
+        
+        else:
+            return True
+
+    except Exception, err:
+        log('is_verified() - {} -- {}'.format(str(err), params), 'error')
+        raise err
+
+

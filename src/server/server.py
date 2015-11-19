@@ -9,7 +9,7 @@ from commonutils.common.core import (verify_params,
 from enttwitter.src.configs.register import HTTP
 
 from conversations.src.server.core import (initiate_conversation,
-        continue_conversation, queue_request)
+        continue_conversation, queue_request, is_verified)
 from conversations.src.channels.config import SERVICES, ACK
 
 
@@ -86,8 +86,15 @@ def process_conversation(params, request):
     '''
     '''
     try:
-        #verify_params(params, ['user_id'])
-        assert 'user_id' in params
+        # validate parameters
+        exc = 'missing parameter'
+        for mandatory in ['user_id', 'channel']:
+            assert mandatory in params
+
+        # check user's registration and verification status
+        exc = 'verification_fail'
+        assert is_verified(params)
+
         new = True
 
         if 'input' in params:
@@ -125,8 +132,17 @@ def process_conversation(params, request):
 
     #except MissingParameterException:
     except AssertionError:
-        write_error(request, 'missing_parameter')
-        return
+        if exc == 'verification_fail':
+            resp = {
+                    'type': 'static',
+                    'user_message': 'You are not registered to use this service'
+                    }
+            write_response(resp, request)
+        
+        
+        else:
+            write_error(request, exc)
+            return
 
     except Exception, err:
         log('process_conversation() fail - %r' % err, 'error')
