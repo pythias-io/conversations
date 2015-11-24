@@ -11,7 +11,7 @@ from service_engine.src.configs.config import SQS_CONFIG
 
 import boto3
 
-DIALOG_ID = '***REMOVED***'
+DIALOG_ID = '0953ab97-2e85-4968-8bc1-f906f23622f3'
 CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):
