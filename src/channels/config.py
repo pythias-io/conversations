@@ -43,3 +43,17 @@ SERVICES['statement']['action'] = 'transactions'
 SERVICES['forex'] = {}
 SERVICES['forex']['type'] = 'dynamic'
 SERVICES['forex']['action'] = 'forex'
+
+
+SERVICES['buybundle'] = {}
+SERVICES['buybundle']['type'] = 'static'
+SERVICES['buybundle']['text'] = """
+You have successfully purchased the bundle. Your new balance is {balance} MB on your number {user_id}
+"""
+
+
+SERVICES['databalance'] = {}
+SERVICES['databalance']['type'] = 'static'
+SERVICES['databalance']['text'] = """
+You have {balance} MB valid until {day}-{month}-2015 on your number {user_id}
+"""

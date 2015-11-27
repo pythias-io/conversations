@@ -118,6 +118,21 @@ def process_conversation(params, request):
         resp['type'] = req_type
         if req_type == 'static':
             response = SERVICES[resp['message'][0]]['text']
+            
+            #################
+            # for airtel only
+            import random
+            if resp['message'][0] in ['buybundle', 'databalance']:
+                xargs = dict(
+                        balance=str(random.randint(10,400)),
+                        user_id=str(params['user_id']),
+                        day=str(random.randint(1,28)),
+                        month=str(random.randint(1,12))
+                        )
+                response = response.format(**xargs)
+            # end of airtel custom
+            ######################
+
         elif req_type == 'dynamic':
             # queue request
             resp['action'] = SERVICES[resp['message'][0]]['action']
