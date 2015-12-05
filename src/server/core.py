@@ -32,7 +32,7 @@ def initiate_conversation(params):
 
         memcache = MemcacheHandler()
         cache_key = '%s.%s' % (CACHE_ID, str(user_id))
-        memcache.set(cache_key, str(conversation_id))
+        memcache.set(cache_key, str(conversation_id), 300)
 
         response = dict(
                 conversation_id=conversation_id,
