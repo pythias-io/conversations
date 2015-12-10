@@ -1,5 +1,6 @@
 """
 """
+import os
 import json
 import time
 from db_utilities.mysql.core import run_query
@@ -11,7 +12,7 @@ from service_engine.src.configs.config import SQS_CONFIG
 
 import boto3
 
-DIALOG_ID = '***REMOVED***'
+DIALOG_ID = os.getenv('DIALOG_ID')
 CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):
