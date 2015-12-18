@@ -6,7 +6,9 @@ ACK = """
 We have received your request. We will get back to you shortly.
 \n%s
 """
-
+ACK_OTP = """
+we have received your request please enter the temporary password we've sent to you.\n%s
+"""
 SERVICES = {}
 SERVICES['options'] = {}
 
@@ -43,3 +45,6 @@ SERVICES['statement']['action'] = 'transactions'
 SERVICES['forex'] = {}
 SERVICES['forex']['type'] = 'dynamic'
 SERVICES['forex']['action'] = 'forex'
+
+SQL = {}
+SQL['insert_requests'] = "insert into requests (request_id, channel_id, sender_id, request_type, otp_password) values ({request_id}, {channel_id}, {user_id}, '{service_id}', '{otp_code}')"
