@@ -1,17 +1,16 @@
 import logging
+import random
 from logging.handlers import TimedRotatingFileHandler
 
 from twisted.web import http
 from twisted.internet import threads
-
 from commonutils.common.core import (verify_params,
         log, MissingParameterException)
 from enttwitter.src.configs.register import HTTP
 
 from conversations.src.server.core import (initiate_conversation,
-        continue_conversation, queue_request, is_verified)
-from conversations.src.channels.config import SERVICES, ACK
-
+        continue_conversation, queue_request, is_verified,insert)
+from conversations.src.channels.config import SERVICES, ACK , ACK_OTP
 
 def get_params(request):
     '''
@@ -96,38 +95,60 @@ def process_conversation(params, request):
         assert is_verified(params)
 
         new = True
-
+        numerical = False
+       #check if its an otp or wds request
         if 'input' in params:
             if len(str(params['input'])) > 1:
                 new = False
+            if (params['input']).isdigit():
+                numerical = True
 
-        if new == True:
-            print 'new session'
-            resp = initiate_conversation(params)
+        if numerical == True:
+            print 'publishing to OTP input:%s'
+            otp_code = random.randint(999,10000)
+            params['otp_code'] = otp_code
+            response = ACK_OTP % params['user_id']
+                
+                #calls the OTP engine#
+                #                    #
+                ######################
+                #insert(params)
         else:
-            print 'existing session'
-            resp = continue_conversation(params)
-
-        try:
-            req_type = SERVICES[resp['message'][0]]['type']
-            print 'Request type: %s -- %s' % (req_type, params)
-        except KeyError:
-            err = 'ERROR: Service not defined - %s' % params
-            raise Exception(err)
-
-        resp['type'] = req_type
-        if req_type == 'static':
-            response = SERVICES[resp['message'][0]]['text']
-        elif req_type == 'dynamic':
-            # queue request
-            resp['action'] = SERVICES[resp['message'][0]]['action']
-            resp['channel'] = params['channel']
-            resp['username'] = params['username']
-            queue_request(resp)
-            response = ACK % params['user_id']
-
+            if new == True:
+                print 'new session'
+                resp = initiate_conversation(params)
+            else:
+                print 'existing session'
+                resp = continue_conversation(params)
+            
+            try:
+                req_type = SERVICES[resp['message'][0]]['type']
+                print 'Request type: %s -- %s' % (req_type, params)
+            except KeyError:
+                err = 'ERROR: Service not defined - %s' % params
+                raise Exception(err)
+            
+            resp['type'] = req_type
+            if req_type == 'static':
+                response = SERVICES[resp['message'][0]]['text']
+            elif req_type == 'dynamic':
+                #check if its an otp request
+                if 'message' in resp:
+                    if SERVICES[resp['message'][0]['action']] == 'balance' or SERVICES[resp['message'][0]['action']] == 'transactions':
+                            print 'calling the otp engine'
+                            #############
+                            # otp engine
+                            #############
+                    else:
+                        #queue request
+                        resp['action'] = SERVICES[resp['message'][0]]['action']
+                        resp['channel'] = params['channel']
+                        resp['username'] = params['username']
+                        queue_request(resp)
+                        response = ACK % params['user_id']
+                
         resp['user_message'] = response
-
+            
         write_response(resp, request)
 
     #except MissingParameterException:

@@ -8,7 +8,8 @@ from db_utilities.mysql.core import run_query
 from commonutils.common.core import log
 from commonutils.watson.client import WDSClient
 from commonutils.memcache.core import MemcacheHandler
-from service_engine.src.configs.config import SQS_CONFIG
+from service_engine.src.configs.config import SQS_CONFIG,SQL
+from persistence_manager.src.consumer.client import publish, get_response
 
 import boto3
 
@@ -149,4 +150,25 @@ def is_verified(params):
         log('is_verified() - {} -- {}'.format(str(err), params), 'error')
         raise err
 
-
+def insert(params):
+    '''
+    inserts OTP requests in a db 
+    '''
+    try:
+        channel_id = params['channel']
+        #publish to persistance queue
+        publish(params['request_id'], SQL['insert_requests'])
+        #fetch
+        x = 0
+        resp = None
+        while x < 4:
+            resp = get_reponse(params['request_id'])
+            if eval(resp):
+                break
+            sleep(0.01)
+            x += 1
+        log('%s - DB Insert resp: %s -- %s' % (str(x), resp,
+            params['request_id']), 'debug', logger)
+    
+    except Exception, err:
+        log('insert fail- %s --%s' %(str(err),'error',self.logger))
