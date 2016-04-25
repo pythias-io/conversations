@@ -114,6 +114,7 @@ def process_conversation(params, request):
                 ######################
                 #insert(params)
         else:
+<<<<<<< HEAD
             if new == True:
                 print 'new session'
                 resp = initiate_conversation(params)
@@ -147,6 +148,44 @@ def process_conversation(params, request):
                         queue_request(resp)
                         response = ACK % params['user_id']
                 
+=======
+            print 'existing session'
+            resp = continue_conversation(params)
+
+        try:
+            req_type = SERVICES[resp['message'][0]]['type']
+            print 'Request type: %s -- %s' % (req_type, params)
+        except KeyError:
+            err = 'ERROR: Service not defined - %s' % params
+            raise Exception(err)
+
+        resp['type'] = req_type
+        if req_type == 'static':
+            response = SERVICES[resp['message'][0]]['text']
+            
+            #################
+            # for airtel only
+            import random
+            if resp['message'][0] in ['buybundle', 'databalance']:
+                xargs = dict(
+                        balance=str(random.randint(10,400)),
+                        user_id=str(params['user_id']),
+                        day=str(random.randint(1,28)),
+                        month=str(random.randint(1,12))
+                        )
+                response = response.format(**xargs)
+            # end of airtel custom
+            ######################
+
+        elif req_type == 'dynamic':
+            # queue request
+            resp['action'] = SERVICES[resp['message'][0]]['action']
+            resp['channel'] = params['channel']
+            resp['username'] = params['username']
+            queue_request(resp)
+            response = ACK % params['user_id']
+
+>>>>>>> origin/airtel
         resp['user_message'] = response
             
         write_response(resp, request)

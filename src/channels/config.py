@@ -47,6 +47,7 @@ SERVICES['forex']['type'] = 'dynamic'
 SERVICES['forex']['action'] = 'forex'
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 SQL = {}
 SQL['insert_requests'] = "insert into requests (request_id, channel_id, sender_id, request_type, otp_password) values ({request_id}, {channel_id}, {user_id}, '{service_id}', '{otp_code}')"
 =======
@@ -71,3 +72,18 @@ SERVICES['jkl']['text'] = """
 Catch Jeff Koinange Live show every Monday at 8 PM!
 """
 >>>>>>> origin/ktn-demo
+=======
+
+SERVICES['buybundle'] = {}
+SERVICES['buybundle']['type'] = 'static'
+SERVICES['buybundle']['text'] = """
+You have successfully purchased the bundle. Your new balance is {balance} MB on your number {user_id}
+"""
+
+
+SERVICES['databalance'] = {}
+SERVICES['databalance']['type'] = 'static'
+SERVICES['databalance']['text'] = """
+You have {balance} MB valid until {day}-{month}-2015 on your number {user_id}
+"""
+>>>>>>> origin/airtel

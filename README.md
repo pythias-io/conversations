@@ -60,7 +60,7 @@ New dialog:
 ```
 #!bash
 
-$ curl -i -X POST --data "username=pythias_io&user_id=***REMOVED***&channel=twitter" "http://***REMOVED***:9010/conversation"
+$ curl -i -X POST --data "username=pythias_io&user_id=3351513075&channel=twitter" "http://52.28.87.96:9010/conversation"
 ```
 
 
@@ -69,7 +69,7 @@ Continuing dialog:
 ```
 #!bash
 
-$ curl -i -X POST --data "username=pythias_io&input=give+me+my+balance&user_id=***REMOVED***&channel=twitter" "http://***REMOVED***:9010/conversation"
+$ curl -i -X POST --data "username=pythias_io&input=give+me+my+balance&user_id=3351513075&channel=twitter" "http://52.28.87.96:9010/conversation"
 ```
 
 More samples on

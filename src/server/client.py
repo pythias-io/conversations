@@ -4,7 +4,7 @@ channel client
 import sys
 import requests
 
-#URL = 'http://***REMOVED***:9010/conversation'
+#URL = 'http://52.28.87.96:9010/conversation'
 URL = 'http://127.0.0.1:9010/conversation'
 DEBUG = False
 CHANNEL = 'client.py'

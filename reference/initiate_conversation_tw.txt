@@ -7,10 +7,10 @@ User-Agent: python-requests/2.7.0 CPython/2.7.9 Linux/3.14.35-28.38.amzn1.x86_64
 Connection: keep-alive
 Content-Type: application/x-www-form-urlencoded
 
-username=pythias_io&user_id=***REMOVED***&channel=twitterHTTP/1.1 200 OK
+username=pythias_io&user_id=3351513075&channel=twitterHTTP/1.1 200 OK
 Transfer-Encoding: chunked
 X-Requesttype: static
-X-Clientid: ***REMOVED***
+X-Clientid: 3351513075
 X-Conversationid: 71408
 
 b0

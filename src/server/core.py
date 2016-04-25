@@ -14,10 +14,14 @@ from persistence_manager.src.consumer.client import publish, get_response
 import boto3
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 DIALOG_ID = os.getenv('DIALOG_ID')
 =======
 DIALOG_ID = '0953ab97-2e85-4968-8bc1-f906f23622f3'
 >>>>>>> origin/ktn-demo
+=======
+DIALOG_ID = '4007defe-a691-4b82-bc65-e0853a9c0993'
+>>>>>>> origin/airtel
 CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):
@@ -94,7 +98,7 @@ def queue_request(resp):
 
     {'conversation_id': '69375',
     'message': ['balance', '', 'Feel free to ask another question... You can request for your account balance or a mini statement. We can even help you locate an ATM near you'],
-    'client_id': ***REMOVED***}
+    'client_id': 3351513075}
     '''
     try:
         payload = {'service_id': resp['action'],
