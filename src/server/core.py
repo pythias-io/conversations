@@ -13,7 +13,11 @@ from persistence_manager.src.consumer.client import publish, get_response
 
 import boto3
 
+<<<<<<< HEAD
 DIALOG_ID = os.getenv('DIALOG_ID')
+=======
+DIALOG_ID = '0953ab97-2e85-4968-8bc1-f906f23622f3'
+>>>>>>> origin/ktn-demo
 CACHE_ID = 'conversations.id'
 
 def initiate_conversation(params):

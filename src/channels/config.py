@@ -46,5 +46,28 @@ SERVICES['forex'] = {}
 SERVICES['forex']['type'] = 'dynamic'
 SERVICES['forex']['action'] = 'forex'
 
+<<<<<<< HEAD
 SQL = {}
 SQL['insert_requests'] = "insert into requests (request_id, channel_id, sender_id, request_type, otp_password) values ({request_id}, {channel_id}, {user_id}, '{service_id}', '{otp_code}')"
+=======
+
+SERVICES['lotto'] = {}
+SERVICES['lotto']['type'] = 'static'
+SERVICES['lotto']['text'] = """
+Like our facebook page My Lotto Kenya on https://facebook.com/mylottokenya
+"""
+
+
+SERVICES['myluckyday'] = {}
+SERVICES['myluckyday']['type'] = 'static'
+SERVICES['myluckyday']['text'] = """
+Send us your lucky number to 0702123456 and stand a chance to win a Samsung Galaxy S550
+"""
+
+
+SERVICES['jkl'] = {}
+SERVICES['jkl']['type'] = 'static'
+SERVICES['jkl']['text'] = """
+Catch Jeff Koinange Live show every Monday at 8 PM!
+"""
+>>>>>>> origin/ktn-demo
