@@ -26,11 +26,11 @@ def initiate_conversation(params):
         client = WDSClient(payload)
         ini_response = client.run_conversation(new=True)
         text_response = eval(ini_response.text)
-        print "WDS Response for {user_id} - {request_id} : %s".format(
+        print "WDS Response for {user_id} ({username}) - : %s".format(
                 **params) % text_response
         conversation_id = text_response['conversation_id']
         client_id = text_response['client_id']
-        assert str(client_id) == str(user_id)
+        #assert str(client_id) == str(user_id)
 
         memcache = MemcacheHandler()
         cache_key = '%s.%s' % (CACHE_ID, str(user_id))

@@ -1,4 +1,5 @@
 *.pyc
+*.pid
 *.DS_Store
 *.egg-info
 *.sqlite3
@@ -6,11 +7,8 @@
 .env
 settings.py
 
-aleph/static/.webassets-cache/*
-aleph/static/assets/*
-aleph/static/vendor/*
 docs/build/*
+logs/*
+logs/
 
-aleph.env
 test_settings.py
-.coverage
