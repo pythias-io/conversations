@@ -86,4 +86,3 @@ SERVICES['databalance']['type'] = 'static'
 SERVICES['databalance']['text'] = """
 You have {balance} MB valid until {day}-{month}-2015 on your number {user_id}
 """
->>>>>>> origin/airtel
