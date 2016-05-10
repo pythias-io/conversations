@@ -114,7 +114,6 @@ def process_conversation(params, request):
                 ######################
                 #insert(params)
         else:
-<<<<<<< HEAD
             if new == True:
                 print 'new session'
                 resp = initiate_conversation(params)
@@ -148,7 +147,6 @@ def process_conversation(params, request):
                         queue_request(resp)
                         response = ACK % params['user_id']
                 
-=======
             print 'existing session'
             resp = continue_conversation(params)
 
@@ -185,7 +183,6 @@ def process_conversation(params, request):
             queue_request(resp)
             response = ACK % params['user_id']
 
->>>>>>> origin/airtel
         resp['user_message'] = response
             
         write_response(resp, request)
